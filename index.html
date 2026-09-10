@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تقييم الأداء الوظيفي - مدرسة ثار الثانوية</title>
+<style>
+body { font-family: Tahoma; background:#f5f7fa; margin:20px; }
+header { text-align:center; margin-bottom:20px; }
+header h1 { margin:5px 0; color:#1f4e79; }
+header h3 { margin:3px 0; color:#555; }
+table { width:100%; border-collapse:collapse; background:#fff; }
+th, td { border:1px solid #ccc; padding:6px; text-align:center; font-size:13px; }
+th { background:#e9edf5; }
+input[type="number"] { width:60px; }
+input[type="text"] { width:120px; }
+.btn { margin-top:15px; padding:8px 16px; background:#1f4e79; color:#fff; border:none; cursor:pointer; border-radius:4px; }
+.btn:hover { background:#163854; }
+tfoot td { font-weight:bold; background:#f0f3fa; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>نظام تقييم الأداء الوظيفي للمعلمات</h1>
+<h3>مدرسة ثار الثانوية</h3>
+<h3>إدارة تعليم نجران</h3>
+<h3>المديرة: سميّة الطلحي</h3>
+</header>
+
+<table id="evaluationTable">
+<thead>
+<tr>
+<th>م</th>
+<th>اسم المعلمة</th>
+<th>بند 1</th>
+<th>بند 2</th>
+<th>بند 3</th>
+<th>بند 4</th>
+<th>بند 5</th>
+<th>المجموع</th>
+<th>النسبة %</th>
+<th>التقدير</th>
+</tr>
+</thead>
+<tbody>
+<!-- 16 صف للمعلمات -->
+<!-- كرري الصف حتى يصبح العدد 16 -->
+<tr>
+<td>1</td>
+<td><input type="text" placeholder="اسم المعلمة"></td>
+<td><input type="number" min="0" max="20"></td>
+<td><input type="number" min="0" max="20"></td>
+<td><input type="number" min="0" max="20"></td>
+<td><input type="number" min="0" max="20"></td>
+<td><input type="number" min="0" max="20"></td>
+<td class="total"></td>
+<td class="percent"></td>
+<td class="grade"></td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="10">كل بند من 20 درجة – المجموع الكلي 100 درجة لكل معلمة</td>
+</tr>
+</tfoot>
+</table>
+
+<button class="btn" onclick="calculateAll()">حساب الدرجات تلقائيًا</button>
+
+<script>
+function calculateAll() {
+const rows = document.querySelectorAll('#evaluationTable tbody tr');
+rows.forEach(row => {
+const inputs = row.querySelectorAll('input[type="number"]');
+let total = 0;
+inputs.forEach(i => total += parseFloat(i.value) || 0);
+
+row.querySelector('.total').textContent = total;
+const percent = (total / 100) * 100;
+row.querySelector('.percent').textContent = percent.toFixed(1) + "%";
+
+let grade = "";
+if (percent >= 90) grade = "ممتاز";
+else if (percent >= 80) grade = "جيد جدًا";
+else if (percent >= 70) grade = "جيد";
+else if (percent >= 60) grade = "مقبول";
+else grade = "يحتاج تحسين";
+
+row.querySelector('.grade').textContent = grade;
+});
+}
+</script>
+
+</body>
+</html>

@@ -2,94 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>تقييم الأداء الوظيفي - مدرسة ثار الثانوية</title>
+<title>نظام تقييم الأداء الوظيفي للمعلمات</title>
 <style>
-body { font-family: Tahoma; background:#f5f7fa; margin:20px; }
-header { text-align:center; margin-bottom:20px; }
-header h1 { margin:5px 0; color:#1f4e79; }
-header h3 { margin:3px 0; color:#555; }
-table { width:100%; border-collapse:collapse; background:#fff; }
-th, td { border:1px solid #ccc; padding:6px; text-align:center; font-size:13px; }
-th { background:#e9edf5; }
-input[type="number"] { width:60px; }
-input[type="text"] { width:120px; }
-.btn { margin-top:15px; padding:8px 16px; background:#1f4e79; color:#fff; border:none; cursor:pointer; border-radius:4px; }
-.btn:hover { background:#163854; }
-tfoot td { font-weight:bold; background:#f0f3fa; }
+    body { font-family: Arial; text-align: center; }
+    table { width: 90%; margin: auto; border-collapse: collapse; }
+    th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+    button { padding: 10px 20px; margin: 20px; font-size: 18px; }
 </style>
 </head>
+
 <body>
 
-<header>
-<h1>نظام تقييم الأداء الوظيفي للمعلمات</h1>
-<h3>مدرسة ثار الثانوية</h3>
-<h3>إدارة تعليم نجران</h3>
-<h3>المديرة: سميّة الطلحي</h3>
-</header>
+<h2>نظام تقييم الأداء الوظيفي للمعلمات</h2>
 
-<table id="evaluationTable">
-<thead>
-<tr>
-<th>م</th>
-<th>اسم المعلمة</th>
-<th>بند 1</th>
-<th>بند 2</th>
-<th>بند 3</th>
-<th>بند 4</th>
-<th>بند 5</th>
-<th>المجموع</th>
-<th>النسبة %</th>
-<th>التقدير</th>
-</tr>
-</thead>
-<tbody>
-<!-- 16 صف للمعلمات -->
-<!-- كرري الصف حتى يصبح العدد 16 -->
-<tr>
-<td>1</td>
-<td><input type="text" placeholder="اسم المعلمة"></td>
-<td><input type="number" min="0" max="20"></td>
-<td><input type="number" min="0" max="20"></td>
-<td><input type="number" min="0" max="20"></td>
-<td><input type="number" min="0" max="20"></td>
-<td><input type="number" min="0" max="20"></td>
-<td class="total"></td>
-<td class="percent"></td>
-<td class="grade"></td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td colspan="10">كل بند من 20 درجة – المجموع الكلي 100 درجة لكل معلمة</td>
-</tr>
-</tfoot>
+<table id="teachersTable">
+    <tr>
+        <th>اسم المعلمة</th>
+        <th>بند 1</th>
+        <th>بند 2</th>
+        <th>بند 3</th>
+        <th>بند 4</th>
+        <th>بند 5</th>
+        <th>المجموع</th>
+        <th>النسبة %</th>
+        <th>التقدير</th>
+    </tr>
+
+    <!-- الصف الأساسي -->
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="number" min="0" max="20"></td>
+        <td><input type="number" min="0" max="20"></td>
+        <td><input type="number" min="0" max="20"></td>
+        <td><input type="number" min="0" max="20"></td>
+        <td><input type="number" min="0" max="20"></td>
+        <td class="total"></td>
+        <td class="percent"></td>
+        <td class="grade"></td>
+    </tr>
 </table>
 
-<button class="btn" onclick="calculateAll()">حساب الدرجات تلقائيًا</button>
+<button onclick="addRow()">➕ إضافة معلمة جديدة</button>
+<button onclick="calculateAll()">حساب الدرجات تلقائيًا</button>
 
 <script>
-function calculateAll() {
-const rows = document.querySelectorAll('#evaluationTable tbody tr');
-rows.forEach(row => {
-const inputs = row.querySelectorAll('input[type="number"]');
-let total = 0;
-inputs.forEach(i => total += parseFloat(i.value) || 0);
+function addRow() {
+    let table = document.getElementById("teachersTable");
+    let row = table.insertRow(-1);
 
-row.querySelector('.total').textContent = total;
-const percent = (total / 100) * 100;
-row.querySelector('.percent').textContent = percent.toFixed(1) + "%";
+    for (let i = 0; i < 9; i++) {
+        let cell = row.insertCell(i);
 
-let grade = "";
-if (percent >= 90) grade = "ممتاز";
-else if (percent >= 80) grade = "جيد جدًا";
-else if (percent >= 70) grade = "جيد";
-else if (percent >= 60) grade = "مقبول";
-else grade = "يحتاج تحسين";
-
-row.querySelector('.grade').textContent = grade;
-});
+        if (i <= 5) {
+            cell.innerHTML = '<input type="number" min="0" max="20">';
+            if (i === 0) cell.innerHTML = '<input type="text">';
+        } else {
+            cell.className = (i === 6 ? "total" : i === 7 ? "percent" : "grade");
+        }
+    }
 }
-</script>
 
-</body>
-</html>
+function calculateAll() {
+    let table = document.getElementById("teachersTable");
+
+    for (let i = 1; i < table.rows.length; i++) {
+        let cells = table.rows[i].cells;
+        let total = 0;
+
+        for (let j = 1; j <= 5; j++) {
+            total += Number(cells
